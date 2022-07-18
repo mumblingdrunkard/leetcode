@@ -3,12 +3,16 @@ struct Solution {}
 impl Solution {
     pub fn min_wasted_space(packages: Vec<i32>, boxes: Vec<Vec<i32>>) -> i32 {
         const M: i64 = 1000000007;
+
         // allow mutation
         let (mut packages, mut boxes) = (packages, boxes);
+
         // sort the packages
         packages.sort();
-        // calculate the cumulative sum
-        let cumulative_size: Vec<_> = [0]
+
+        // calculate the cumulative sum, prepend 0 so that cumulative_size[n] is the total size of
+        // the first n packages
+        let cums: Vec<_> = [0]
             .iter()
             .chain(packages.iter())
             .scan(0i64, |total, &size| {
@@ -17,32 +21,35 @@ impl Solution {
             })
             .collect();
 
-        for supplier in boxes.iter_mut() {
-            supplier.sort();
-        }
+        // sort all suppliers
+        boxes.iter_mut().for_each(|s| s.sort());
 
         (boxes
-            .iter()
+            .iter() // for all suppliers
+            // filter out the incompatible suppliers
             .filter(|supplier| supplier.last().unwrap() >= packages.last().unwrap())
+            // map each supplier to their total wasted space, by
             .map(|supplier| {
                 supplier
-                    .iter()
+                    .iter() // for each box size in the supplier
                     .scan(0, |split, &box_size| {
-                        let new_split =
-                            packages.partition_point(|&package_size| package_size <= box_size);
-                        let n_packages = new_split - *split;
-                        let total_space = n_packages as i64 * box_size as i64;
-                        let wasted_space =
-                            total_space - (cumulative_size[new_split] - cumulative_size[*split]);
-                        *split = new_split;
-
-                        Some(wasted_space)
+                        // find number of packages smaller or equal to box_size
+                        let new_split = packages.partition_point(|&p| p <= box_size);
+                        let n = new_split - *split; // number of packages in this split
+                        // calculate total space used by boxes for packages
+                        // NB: use i64 internally as .min() will get wrong value if we % the total
+                        let total = n as i64 * box_size as i64;
+                        // wasted space is equal to the size of all the boxes minus the cumulative
+                        // size of the packages between the previous and the current split
+                        let wasted = total - (cums[new_split] - cums[*split]);
+                        *split = new_split; // update the split
+                        Some(wasted) // yield the wasted space
                     })
-                    .fold(0, |sum, wasted_space| sum + wasted_space)
+                    .fold(0, |sum, wasted| sum + wasted) // accumulate the wasted space
             })
-            .min()
-            .unwrap_or(-1)
-            % M) as i32
+            .min() // take the minimum of all suppliers
+            .unwrap_or(-1) // or return -1 if no compatible suppliers were found
+            % M) as i32 // mod 10⁹+7 per problem requirements and cast to i32
     }
 }
 
@@ -58,10 +65,6 @@ fn main() {
         .iter_mut()
         .enumerate()
         .for_each(|(i, v)| *v = vec![i as i32 + 50000, 100000]);
-
-    for v in packages.iter().take(5) {
-        println!("{}", v);
-    }
 
     println!("{}", Solution::min_wasted_space(packages, suppliers));
 }
