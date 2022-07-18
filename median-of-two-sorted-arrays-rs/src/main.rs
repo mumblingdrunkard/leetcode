@@ -1,7 +1,16 @@
-#[allow(unused)]
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+//
+// This Source Code Form is "Incompatible With Secondary Licenses", as
+// defined by the Mozilla Public License, v. 2.0.
+//
+// Copyright © 2022 mumblingdrunkard
+//
+// solution for problem found at https://leetcode.com/problems/median-of-two-sorted-arrays/
+
 struct Solution {}
 
-#[allow(unused)]
 impl Solution {
     // idea: find splits i and j in nums1 and nums2 such that
     // a) i + j = (nums1.len() + nums2.len()) / 2, and
@@ -26,7 +35,7 @@ impl Solution {
 
         loop {
             // supplement with elements from b (the longer array) until we have half the elements
-            let mut j = half - i;
+            let j = half - i;
 
             // initialise al, ar, bl, br with default values
             let (mut al, mut ar, mut bl, mut br) = (i32::MIN, i32::MAX, i32::MIN, i32::MAX);
