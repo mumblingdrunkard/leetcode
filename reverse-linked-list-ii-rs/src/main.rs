@@ -69,16 +69,12 @@ impl Solution {
     }
 
     pub fn take_child(head: &mut Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        match head {
-            Some(node) => node.next.take(),
-            _ => None,
-        }
+        head.as_mut()?.next.take()
     }
 
     pub fn give_child(head: &mut Option<Box<ListNode>>, child: Option<Box<ListNode>>) {
-        match head {
-            Some(node) => node.next = child,
-            _ => {}
+        if let Some(node) = head {
+            node.next = child;
         }
     }
 }
