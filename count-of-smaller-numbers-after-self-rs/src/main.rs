@@ -9,6 +9,9 @@
 //
 // solution for problem found at https://leetcode.com/problems/count-of-smaller-numbers-after-self/
 
+// idea: iterate through the array in reverse and track counts with a fenwick tree.
+// That is, for each n in the reversed array, do fenwick.add(n + 1, 1), then yield fenwick.get(n).
+
 struct Solution {}
 
 impl Solution {
