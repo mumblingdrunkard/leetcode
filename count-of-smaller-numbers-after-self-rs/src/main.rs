@@ -21,14 +21,17 @@ impl Solution {
             i - (i & i.overflowing_neg().0)
         }
 
+        let max = nums.iter().max().unwrap();
+        let min = nums.iter().min().unwrap();
+
         // for each number,
         nums.iter()
             // ... in reverse
             .rev()
             // track numbers with a fenwick tree
-            .scan(vec![0; 20002], |fenwick, n| {
+            .scan(vec![0; (max - min + 2) as usize], |fenwick, n| {
                 // offset n such that all values are strictly larger than 0
-                let n = (n + 10001) as usize;
+                let n = (n - min + 1) as usize;
 
                 // update the fenwick tree for all elements larger than n
                 let mut i = n + 1;
