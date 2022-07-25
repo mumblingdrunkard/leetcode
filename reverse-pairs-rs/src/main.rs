@@ -21,6 +21,7 @@ impl Solution {
             i - (i & i.overflowing_neg().0)
         }
 
+        // map each number to a usize by sorting then searching later
         let mut sorted = nums.clone();
         sorted.sort();
         sorted.dedup();
@@ -32,21 +33,23 @@ impl Solution {
             .rev()
             // track numbers with a fenwick tree
             .scan(vec![0; sorted.len() + 2], |fenwick, &n| {
-                // offset n such that all values are strictly larger than 0
+                // position in fenwick tree is determined by position in the sorted array
+                // match here because binary_search might return Ok(_) or Err(_)
                 let doubled = match sorted.binary_search(&(n as i64 * 2 + 1)) {
                     Ok(index) => index,
                     Err(index) => index,
                 } + 1;
+                // will always be Ok(_) because n is guaranteed to be in the sorted array
                 let n = sorted.binary_search(&(n as i64)).unwrap() + 1;
 
-                // calculate the value for n
+                // calculate the number of pairs with n
                 let (mut sum, mut i) = (0, n);
                 while i > 0 {
                     sum += fenwick[i];
                     i = get_parent(i);
                 }
 
-                // update the fenwick tree for all elements larger than n*2+1
+                // update the fenwick tree for all elements larger than n*2
                 let mut i = doubled;
                 while i < fenwick.len() {
                     fenwick[i] += 1; // adding one
@@ -56,7 +59,7 @@ impl Solution {
                 // yield the sum
                 Some(sum)
             })
-        .sum()
+            .sum()
     }
 }
 
