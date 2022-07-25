@@ -13,14 +13,6 @@ struct Solution {}
 
 impl Solution {
     pub fn reverse_pairs(nums: Vec<i32>) -> i32 {
-        fn get_next(i: usize) -> usize {
-            i + (i & i.overflowing_neg().0)
-        }
-
-        fn get_parent(i: usize) -> usize {
-            i - (i & i.overflowing_neg().0)
-        }
-
         // map each number to a usize by sorting then searching later
         let mut sorted = nums.clone();
         sorted.sort();
@@ -46,14 +38,14 @@ impl Solution {
                 let (mut sum, mut i) = (0, n);
                 while i > 0 {
                     sum += fenwick[i];
-                    i = get_parent(i);
+                    i -= i & i.overflowing_neg().0; // parent element
                 }
 
                 // update the fenwick tree for all elements larger than n*2
                 let mut i = doubled;
                 while i < fenwick.len() {
                     fenwick[i] += 1; // adding one
-                    i = get_next(i);
+                    i += i & i.overflowing_neg().0; // next element
                 }
 
                 // yield the sum

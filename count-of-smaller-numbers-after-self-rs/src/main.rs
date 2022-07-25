@@ -16,14 +16,6 @@ struct Solution {}
 
 impl Solution {
     pub fn count_smaller(nums: Vec<i32>) -> Vec<i32> {
-        fn get_next(i: usize) -> usize {
-            i + (i & i.overflowing_neg().0)
-        }
-
-        fn get_parent(i: usize) -> usize {
-            i - (i & i.overflowing_neg().0)
-        }
-
         let max = nums.iter().max().unwrap();
         let min = nums.iter().min().unwrap();
 
@@ -40,14 +32,14 @@ impl Solution {
                 let mut i = n + 1;
                 while i < fenwick.len() {
                     fenwick[i] += 1; // adding one
-                    i = get_next(i);
+                    i += i & i.overflowing_neg().0; // next element
                 }
 
                 // calculate the value for n
                 let (mut sum, mut i) = (0, n);
                 while i > 0 {
-                    sum += fenwick[i];
-                    i = get_parent(i);
+                    sum += fenwick[i]; // accumulate the sum
+                    i -= i & i.overflowing_neg().0; // parent element
                 }
 
                 // yield the sum
@@ -55,7 +47,7 @@ impl Solution {
             })
             // collect all the sums
             .collect::<Vec<i32>>()
-            // then reverse the vector again
+            // ... then reverse the vector again
             .into_iter()
             .rev()
             .collect()
