@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "minimum-space-wasted-from-packaging"
+name = "minimum-space-wasted-from-packaging-rs"
 version = "0.1.0"
