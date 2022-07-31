@@ -13,20 +13,19 @@ struct Solution {}
 
 impl Solution {
     pub fn plus_one(digits: Vec<i32>) -> Vec<i32> {
-        let mut digits: Vec<_> = digits.into_iter().rev().collect();
+        let mut digits = digits;
         let mut rem = 1;
-
-        for d in digits.iter_mut() {
+        for d in digits.iter_mut().rev() {
             *d += rem;
             rem = *d / 10;
             *d %= 10;
         }
 
         if rem != 0 {
-            digits.push(rem);
+            digits.insert(0, rem);
         }
 
-        digits.into_iter().rev().collect()
+        digits
     }
 }
 
