@@ -14,21 +14,12 @@ struct Solution {}
 impl Solution {
     pub fn mirror_reflection(p: i32, q: i32) -> i32 {
         let g = Self::gcd(p, q);
-        let (p, q) = (p/g, q/g);
-        if p % 2 == 0 && q % 2 == 1 {
-            2
-        } else if p % 2 == 1 && q % 2 == 0 {
-            0
-        } else {
-            1
-        }
+        let (p, q) = (p / g, q / g);
+        (p + 1) % 2 + q % 2
     }
 
     pub fn gcd(a: i32, b: i32) -> i32 {
-        if b == 0 {
-            return a;
-        }
-        Self::gcd(b, a % b)
+        (b == 0).then(|| a).unwrap_or_else(|| Self::gcd(b, a % b))
     }
 
     #[allow(unused)]
