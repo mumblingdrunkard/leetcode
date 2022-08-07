@@ -78,11 +78,6 @@ impl Solution {
         p[0][4][4] = 1;
 
         for l in 1..Self::log2(n) {
-            // 0 can be followed by { 1 }
-            // 1 can be followed by { 0, 2 }
-            // 2 can be followed by { 0, 3, 4 }
-            // 3 can be followed by { 2, 4 }
-            // 4 can be followed by { 0 }
             let mut next = [[0; 5]; 5];
             for i in 0..5 {
                 for j in 0..5 {
@@ -130,5 +125,5 @@ impl Solution {
 }
 
 fn main() {
-    println!("{}", Solution::count_vowel_permutation(5));
+    println!("{}", Solution::count_vowel_permutation(2));
 }
