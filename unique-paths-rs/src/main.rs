@@ -19,9 +19,12 @@ impl Solution {
         let mut divisors = 2..m;
         let mut div = divisors.next();
 
+        // multipliers n and above, this lets us ignore the (n-1)! part for the divisor
         (n..m + n - 1).fold(1i64, |mut result, m| {
+            // multiply by the next multiplier
             result *= m;
 
+            // divide the result if possible
             if let Some(d) = div {
                 if result % d == 0 {
                     result /= d;
