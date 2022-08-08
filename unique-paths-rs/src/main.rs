@@ -12,16 +12,14 @@
 struct Solution {}
 
 impl Solution {
+    // calculates (n+m-2)!/((n-1)!(m-1)!)
     pub fn unique_paths(m: i32, n: i32) -> i32 {
-        let multipliers = (1..m).scan(n as i64, |n, _| {
-            *n += 1;
-            Some(*n - 1)
-        });
+        let (n, m) = (n as i64, m as i64);
 
-        let mut divisors = 2..m as i64;
+        let mut divisors = 2..m;
         let mut div = divisors.next();
 
-        multipliers.fold(1i64, |mut result, m| {
+        (n..m + n - 1).fold(1i64, |mut result, m| {
             result *= m;
 
             if let Some(d) = div {
@@ -39,4 +37,5 @@ impl Solution {
 fn main() {
     println!("{}", Solution::unique_paths(7, 7));
     println!("{}", Solution::unique_paths(3, 7));
+    println!("{}", Solution::unique_paths(2, 2));
 }
