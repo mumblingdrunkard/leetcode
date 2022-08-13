@@ -28,18 +28,24 @@ impl Solution {
         for i in 0..wlen {
             let mut submap = map.clone();
             let mut found = 0;
+            let mut unmatched = submap.keys().count();
             let (mut start, mut end) = (i, i);
             while end + wlen <= s.len() {
                 while found < nwords && end + wlen <= s.len() {
                     if let Some(e) = submap.get_mut(&s[end..end + wlen]) {
                         *e -= 1;
+                        if *e == 0 {
+                            unmatched -= 1;
+                        }
                         found += 1;
                         end = end + wlen;
-                        println!("{}", s[start..end].iter().collect::<String>());
                     } else {
                         while start < end {
                             if let Some(e) = submap.get_mut(&s[start..start + wlen]) {
                                 *e += 1;
+                                if *e == 1 {
+                                    unmatched += 1;
+                                }
                             }
                             start = start + wlen;
                             found -= 1;
@@ -49,7 +55,7 @@ impl Solution {
                     }
                 }
 
-                if submap.iter().all(|(_, &v)| v == 0) {
+                if unmatched == 0 {
                     result.push(start as i32);
                 }
 
@@ -59,6 +65,9 @@ impl Solution {
 
                 if let Some(e) = submap.get_mut(&s[start..start + wlen]) {
                     *e += 1;
+                    if *e == 1 {
+                        unmatched += 1;
+                    }
                     start = start + wlen;
                     found -= 1;
                 }
