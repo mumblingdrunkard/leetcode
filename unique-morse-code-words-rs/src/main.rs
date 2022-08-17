@@ -23,7 +23,7 @@ impl Solution {
                     ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-",
                     ".--", "-..-", "-.--", "--..",
                 ]
-                .iter(),
+                .into_iter(),
             )
             .collect::<HashMap<_, _>>();
 
@@ -33,7 +33,7 @@ impl Solution {
                 // map each word to its corresponding morse-code
                 let morse = w
                     .chars()
-                    .map(|c| **map.get(&c).unwrap())
+                    .map(|c| *map.get(&c).unwrap())
                     .collect::<String>();
                 // accumulate the morse-code in the set
                 set.insert(morse);
