@@ -13,18 +13,8 @@ struct Solution {}
 
 impl Solution {
     pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
-        let mut k = 1;
-        let mut last_seen = nums[0];
-        for i in 1..nums.len() {
-            if nums[i] == last_seen {
-                continue;
-            }
-
-            nums[k] = nums[i];
-            last_seen = nums[i];
-            k += 1;
-        }
-        k as i32
+        nums.dedup();
+        nums.len() as i32
     }
 }
 
