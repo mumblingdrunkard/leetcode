@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "shifting-letters-ii"
+name = "shifting-letters-ii-rs"
 version = "0.1.0"
