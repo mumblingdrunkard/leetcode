@@ -27,7 +27,7 @@ impl TreeNode {
         }
     }
 
-    pub fn new_wrapped(val: i32) -> N {
+    pub fn wrapped(val: i32) -> N {
         Some(Rc::new(RefCell::new(Self {
             val,
             left: None,
@@ -75,8 +75,8 @@ impl Solution {
 fn main() {
     let tree = TreeNode::with(
         3,
-        TreeNode::with(9, TreeNode::new_wrapped(15), TreeNode::new_wrapped(7)),
-        TreeNode::new_wrapped(20),
+        TreeNode::with(9, TreeNode::wrapped(15), TreeNode::wrapped(7)),
+        TreeNode::wrapped(20),
     );
     println!("{:?}", Solution::average_of_levels(tree));
 }
