@@ -28,7 +28,7 @@ impl Solution {
 
         engineers.sort();
 
-        (engineers
+        let result = engineers
             .into_iter()
             .rev()
             .scan(
@@ -42,13 +42,16 @@ impl Solution {
                         *sum -= q.pop().unwrap().0;
                     }
 
-                    // e will always be the minimum efficiency
+                    // e will always be the minimum efficiency, doesn't really matter if s was
+                    // removed as it then will always be less than optimal
                     Some(*sum * e as i64)
                 },
             )
             .max()
             .unwrap()
-            % M) as i32
+            % M;
+
+        result as i32
     }
 }
 
