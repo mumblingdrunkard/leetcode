@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "utf8-validation-rs"
+name = "utf-8-validation-rs"
 version = "0.1.0"

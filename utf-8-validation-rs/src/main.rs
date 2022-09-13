@@ -43,5 +43,5 @@ impl Solution {
 }
 
 fn main() {
-    println!("Hello, world!");
+    println!("{}", Solution::valid_utf8(vec![145]));
 }
