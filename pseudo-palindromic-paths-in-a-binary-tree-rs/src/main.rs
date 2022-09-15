@@ -47,31 +47,24 @@ type N = Option<Rc<RefCell<TreeNode>>>;
 
 impl Solution {
     pub fn pseudo_palindromic_paths(root: N) -> i32 {
-        Self::recursive(root, &mut [false; 9], 0)
+        Self::recursive(root, 0)
     }
 
-    pub fn recursive(root: N, state: &mut [bool; 9], mut count: usize) -> i32 {
+    pub fn recursive(root: N, mut state: u16) -> i32 {
         if let Some(node) = root {
-            let i = node.borrow().val as usize - 1;
-            state[i] = !state[i];
-            if state[i] {
-                count += 1;
-            } else {
-                count -= 1;
-            }
+            let i = node.borrow().val as usize;
+            state ^= 1 << i;
 
             let res = if node.borrow().left.is_none() && node.borrow().right.is_none() {
-                if count > 1 {
+                if state.count_ones() > 1 {
                     0
                 } else {
                     1
                 }
             } else {
-                Self::recursive(node.borrow().left.clone(), state, count)
-                    + Self::recursive(node.borrow().right.clone(), state, count)
+                Self::recursive(node.borrow().left.clone(), state)
+                    + Self::recursive(node.borrow().right.clone(), state)
             };
-
-            state[i] = !state[i]; // revert myself
 
             res
         } else {
