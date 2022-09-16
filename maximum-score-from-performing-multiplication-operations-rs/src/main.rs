@@ -14,37 +14,37 @@ struct Solution {}
 
 impl Solution {
     pub fn maximum_score(nums: Vec<i32>, multipliers: Vec<i32>) -> i32 {
-        use std::cmp::max;
+        use std::cmp;
         let (n, m) = (nums, multipliers);
-        let mut s = vec![vec![i32::MIN; m.len() + 1]; m.len() + 1];
 
-        s[0][0] = 0; // s[t][l] is the max result at turn t with l elements from the left and t-l
-                     // elements from the right
+        let (mut buf1, mut buf2) = (vec![i32::MIN; m.len() + 1], vec![i32::MIN; m.len() + 1]);
+        let (mut curr, mut next) = (&mut buf1, &mut buf2);
 
+        curr[0] = 0;
         for t in 0..m.len() {
             for l in 0..t + 1 {
                 // from current position, check if either of the next positions are greater than
                 // their already calculated maxima
 
                 // next position with same l (takes from right)
-                s[t + 1][l] = max(
-                    // current max for next position
-                    s[t + 1][l],
-                    // current position + current multiplier * number from right
-                    s[t][l] + n[n.len() - 1 - (t - l)] * m[t],
+                next[l] = cmp::max(
+                    next[l],                                   // current max for next position
+                    curr[l] + n[n.len() - 1 - (t - l)] * m[t], // position + multiplier * right number
                 );
 
                 // next position with l + 1 (takes from left)
-                s[t + 1][l + 1] = max(
-                    s[t + 1][l + 1], // current max for next position
-                    // current position + current multiplier * number from left
-                    s[t][l] + n[l] * m[t],
+                next[l + 1] = cmp::max(
+                    next[l + 1],           // current max for next position
+                    curr[l] + n[l] * m[t], // position + multiplier * left number
                 );
             }
+
+            curr[..t + 2].fill(i32::MIN); // reset curr
+            (curr, next) = (next, curr); // swap the buffers
         }
 
         // result is max of last turn
-        *s.last().unwrap().iter().max().unwrap()
+        *curr.iter().max().unwrap()
     }
 }
 
