@@ -14,6 +14,8 @@ struct Solution {}
 impl Solution {
     pub fn min_cost(colors: String, needed_time: Vec<i32>) -> i32 {
         use std::cmp::Reverse;
+        let o_sum = needed_time.iter().sum::<i32>();
+
         let mut v = colors
             .bytes()
             .zip(needed_time.into_iter())
@@ -26,7 +28,6 @@ impl Solution {
             })
             .collect::<Vec<_>>();
 
-        let o_sum = v.iter().map(|(_, Reverse(t))| t).sum::<i32>();
         v.sort();
         v.dedup_by(|a, b| a.0 == b.0);
         let n_sum = v.iter().map(|(_, Reverse(t))| t).sum::<i32>();
