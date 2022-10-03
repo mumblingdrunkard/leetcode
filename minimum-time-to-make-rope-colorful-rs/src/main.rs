@@ -22,14 +22,15 @@ impl Solution {
             .for_each(|(col, t)| {
                 if col != prev {
                     prev = col;
-                    groups.push((1, t));
-                } else if let Some((cnt, gt)) = groups.last_mut() {
-                    *cnt += 1;
-                    *gt = std::cmp::max(*gt, t);
+                    groups.push(t);
                 }
+
+                let gt = groups.last_mut().unwrap();
+                // only keep the max in each group
+                *gt = std::cmp::max(*gt, t);
             });
 
-        o_sum - groups.into_iter().map(|(_, t)| t).sum::<i32>()
+        o_sum - groups.into_iter().sum::<i32>()
     }
 }
 
