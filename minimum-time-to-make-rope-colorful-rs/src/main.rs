@@ -13,26 +13,23 @@ struct Solution {}
 
 impl Solution {
     pub fn min_cost(colors: String, needed_time: Vec<i32>) -> i32 {
-        use std::cmp::Reverse;
         let o_sum = needed_time.iter().sum::<i32>();
-
-        let mut v = colors
+        let mut groups = vec![];
+        let mut prev = b' ';
+        colors
             .bytes()
             .zip(needed_time.into_iter())
-            .scan((b' ', 0), |(prev_col, group), (b, t)| {
-                if b != *prev_col {
-                    *prev_col = b;
-                    *group += 1;
+            .for_each(|(col, t)| {
+                if col != prev {
+                    prev = col;
+                    groups.push((1, t));
+                } else if let Some((cnt, gt)) = groups.last_mut() {
+                    *cnt += 1;
+                    *gt = std::cmp::max(*gt, t);
                 }
-                Some((*group, Reverse(t)))
-            })
-            .collect::<Vec<_>>();
+            });
 
-        v.sort();
-        v.dedup_by(|a, b| a.0 == b.0);
-        let n_sum = v.iter().map(|(_, Reverse(t))| t).sum::<i32>();
-
-        o_sum - n_sum
+        o_sum - groups.into_iter().map(|(_, t)| t).sum::<i32>()
     }
 }
 
