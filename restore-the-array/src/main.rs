@@ -5,9 +5,9 @@
 // This Source Code Form is "Incompatible With Secondary Licenses", as
 // defined by the Mozilla Public License, v. 2.0.
 //
-// Copyright © 2022 mumblingdrunkard
+// Copyright © 2023 mumblingdrunkard
 //
-// solution for problem found at https://leetcode.com/problems/two-sum/
+// solution for problem found at https://leetcode.com/problems/restore-the-array/
 
 struct Solution;
 
